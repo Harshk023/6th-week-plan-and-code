@@ -67,3 +67,87 @@ if __name__ == "__main__":
 # - Same as Top-Down Dynamic Programming.
 # - Space used for recursion stack + memo dictionary.
 # ----------------------------------------------------
+
+
+"""
+Day 37: Climbing Stairs Optimized (LC #70, #746)
+Author: [Your Name]
+Date: [Today's Date]
+
+Problems Covered:
+1. LC #70 – Climbing Stairs
+2. LC #746 – Min Cost Climbing Stairs
+"""
+
+# ----------------------------------------------------
+# 1. LC #70 – Climbing Stairs
+# ----------------------------------------------------
+"""
+Problem:
+You are climbing a staircase. It takes n steps to reach the top.
+Each time you can climb either 1 or 2 steps.
+Return how many distinct ways you can climb to the top.
+
+Approach:
+- Same recurrence as Fibonacci: ways(n) = ways(n-1) + ways(n-2)
+- Optimize DP to use O(1) space.
+"""
+
+def climbStairs(n):
+    if n <= 2:
+        return n
+    prev1, prev2 = 1, 2
+    for _ in range(3, n+1):
+        prev1, prev2 = prev2, prev1 + prev2
+    return prev2
+
+
+# ----------------------------------------------------
+# 2. LC #746 – Min Cost Climbing Stairs
+# ----------------------------------------------------
+"""
+Problem:
+You are given an integer array cost where cost[i] is the cost of i-th step.
+Once you pay the cost, you can climb 1 or 2 steps.
+Return the minimum cost to reach the top.
+
+Example:
+Input: cost = [10,15,20]
+Output: 15
+(Explanation: start at step 1 with cost 15, climb two steps to top)
+
+Approach:
+- DP: minCost(i) = cost[i] + min(minCost(i+1), minCost(i+2))
+- Optimize to O(1) space using two variables.
+"""
+
+def minCostClimbingStairs(cost):
+    n = len(cost)
+    prev1, prev2 = 0, 0  # cost to reach top from i+1, i+2
+    for i in range(n-1, -1, -1):
+        curr = cost[i] + min(prev1, prev2)
+        prev1, prev2 = curr, prev1
+    return min(prev1, prev2)
+
+
+# ----------------------------------------------------
+# Example Usage
+# ----------------------------------------------------
+if __name__ == "__main__":
+    # LC #70
+    print("Climbing Stairs (n=5):", climbStairs(5))  # Expected: 8
+    
+    # LC #746
+    cost1 = [10,15,20]
+    print("Min Cost Climbing Stairs [10,15,20]:", minCostClimbingStairs(cost1))  # Expected: 15
+    
+    cost2 = [1,100,1,1,1,100,1,1,100,1]
+    print("Min Cost Climbing Stairs [1,100,1,1,1,100,1,1,100,1]:", minCostClimbingStairs(cost2))  # Expected: 6
+
+
+# ----------------------------------------------------
+# Time & Space Complexity:
+# ----------------------------------------------------
+# Climb Stairs (#70): Time O(n), Space O(1)
+# Min Cost Climbing Stairs (#746): Time O(n), Space O(1)
+# ----------------------------------------------------
