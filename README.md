@@ -151,3 +151,99 @@ if __name__ == "__main__":
 # Climb Stairs (#70): Time O(n), Space O(1)
 # Min Cost Climbing Stairs (#746): Time O(n), Space O(1)
 # ----------------------------------------------------
+
+"""
+Day 38: Unique Paths (LC #62, #63)
+Author: [Your Name]
+Date: [Today's Date]
+
+Problems Covered:
+1. LC #62 – Unique Paths
+2. LC #63 – Unique Paths II (with obstacles)
+"""
+
+# ----------------------------------------------------
+# 1. LC #62 – Unique Paths
+# ----------------------------------------------------
+"""
+Problem:
+A robot is located at the top-left corner of an m x n grid.
+The robot can move either down or right at any point.
+How many unique paths are there to reach the bottom-right?
+
+Approach (DP):
+- DP[i][j] = number of ways to reach cell (i, j).
+- Recurrence: DP[i][j] = DP[i-1][j] + DP[i][j-1].
+- Base case: first row and first column = 1.
+
+Time Complexity: O(m*n)
+Space Complexity: O(m*n), can be optimized to O(n).
+"""
+
+def uniquePaths(m, n):
+    dp = [[1] * n for _ in range(m)]
+    for i in range(1, m):
+        for j in range(1, n):
+            dp[i][j] = dp[i-1][j] + dp[i][j-1]
+    return dp[m-1][n-1]
+
+
+# ----------------------------------------------------
+# 2. LC #63 – Unique Paths II
+# ----------------------------------------------------
+"""
+Problem:
+Same as LC #62, but grid contains obstacles (1 = obstacle, 0 = free space).
+Return number of unique paths considering obstacles.
+
+Approach:
+- If obstacle at (0,0) → return 0.
+- DP[i][j] = 0 if obstacleGrid[i][j] == 1.
+- Else DP[i][j] = DP[i-1][j] + DP[i][j-1].
+
+Time Complexity: O(m*n)
+Space Complexity: O(m*n), can be optimized.
+"""
+
+def uniquePathsWithObstacles(obstacleGrid):
+    m, n = len(obstacleGrid), len(obstacleGrid[0])
+    dp = [[0] * n for _ in range(m)]
+    
+    # Starting cell
+    dp[0][0] = 1 if obstacleGrid[0][0] == 0 else 0
+    
+    for i in range(m):
+        for j in range(n):
+            if obstacleGrid[i][j] == 1:
+                dp[i][j] = 0
+            elif i == 0 and j == 0:
+                continue
+            else:
+                dp[i][j] = (dp[i-1][j] if i > 0 else 0) + (dp[i][j-1] if j > 0 else 0)
+    
+    return dp[m-1][n-1]
+
+
+# ----------------------------------------------------
+# Example Usage
+# ----------------------------------------------------
+if __name__ == "__main__":
+    # LC #62
+    print("Unique Paths (3x7 grid):", uniquePaths(3, 7))  # Expected: 28
+    
+    # LC #63
+    obstacleGrid = [
+        [0,0,0],
+        [0,1,0],
+        [0,0,0]
+    ]
+    print("Unique Paths with Obstacles:", uniquePathsWithObstacles(obstacleGrid))  # Expected: 2
+
+
+# ----------------------------------------------------
+# Key Notes:
+# ----------------------------------------------------
+# - Unique Paths (#62): classic grid DP → only right/down moves.
+# - Unique Paths II (#63): same but blocks (obstacles) must be considered.
+# - Both solvable in O(m*n), space can be reduced to O(n).
+# ----------------------------------------------------
