@@ -247,3 +247,76 @@ if __name__ == "__main__":
 # - Unique Paths II (#63): same but blocks (obstacles) must be considered.
 # - Both solvable in O(m*n), space can be reduced to O(n).
 # ----------------------------------------------------
+
+
+"""
+Day 39: Coin Change (LC #322)
+Author: [Your Name]
+Date: [Today's Date]
+
+Problem Statement (LC #322):
+You are given an integer array coins representing coin denominations
+and an integer amount representing a total amount of money.
+
+Return the fewest number of coins that make up the amount.
+If that amount cannot be made up, return -1.
+
+Example:
+Input: coins = [1,2,5], amount = 11
+Output: 3
+(Explanation: 11 = 5 + 5 + 1)
+"""
+
+# ----------------------------------------------------
+# Approach:
+# ----------------------------------------------------
+"""
+1. This is a classic DP problem (unbounded knapsack type).
+2. Create a DP array where dp[i] = minimum coins needed for amount i.
+3. Base case: dp[0] = 0 (0 coins to make amount 0).
+4. For each coin, update dp[i] if dp[i - coin] is reachable.
+5. Answer = dp[amount], if not updated → return -1.
+
+Time Complexity: O(amount * n) where n = number of coins
+Space Complexity: O(amount)
+"""
+
+def coinChange(coins, amount):
+    dp = [float('inf')] * (amount + 1)
+    dp[0] = 0
+    
+    for coin in coins:
+        for i in range(coin, amount + 1):
+            dp[i] = min(dp[i], dp[i - coin] + 1)
+    
+    return dp[amount] if dp[amount] != float('inf') else -1
+
+
+# ----------------------------------------------------
+# Example Usage
+# ----------------------------------------------------
+if __name__ == "__main__":
+    coins1 = [1, 2, 5]
+    amount1 = 11
+    print("Coins:", coins1, "Amount:", amount1)
+    print("Minimum Coins:", coinChange(coins1, amount1))  # Expected: 3
+    
+    coins2 = [2]
+    amount2 = 3
+    print("Coins:", coins2, "Amount:", amount2)
+    print("Minimum Coins:", coinChange(coins2, amount2))  # Expected: -1
+    
+    coins3 = [1]
+    amount3 = 0
+    print("Coins:", coins3, "Amount:", amount3)
+    print("Minimum Coins:", coinChange(coins3, amount3))  # Expected: 0
+
+
+# ----------------------------------------------------
+# Key Notes:
+# ----------------------------------------------------
+# - This is an example of bottom-up DP.
+# - Similar to unbounded knapsack (infinite coins allowed).
+# - dp[i] stores minimum coins to make amount i.
+# - If dp[amount] = inf → not possible.
+# ----------------------------------------------------
