@@ -437,3 +437,96 @@ if __name__ == "__main__":
 # - DP grid stores minimum path cost up to each cell.
 # ----------------------------------------------------
 
+
+"""
+Day 41: Review Recursion + Memoization
+Author: [Your Name]
+Date: [Today's Date]
+
+Problems Reviewed:
+1. LC #509 – Fibonacci Number
+2. LC #70 – Climbing Stairs
+3. LC #322 – Coin Change
+"""
+
+# ----------------------------------------------------
+# 1. LC #509 – Fibonacci Number
+# ----------------------------------------------------
+"""
+Naive recursion → O(2^n).
+With memoization → O(n).
+"""
+
+def fib(n, memo={}):
+    if n in memo:
+        return memo[n]
+    if n <= 1:
+        return n
+    memo[n] = fib(n-1, memo) + fib(n-2, memo)
+    return memo[n]
+
+
+# ----------------------------------------------------
+# 2. LC #70 – Climbing Stairs
+# ----------------------------------------------------
+"""
+Ways(n) = Ways(n-1) + Ways(n-2)
+Base cases: Ways(1) = 1, Ways(2) = 2
+"""
+
+def climbStairs(n, memo={}):
+    if n in memo:
+        return memo[n]
+    if n <= 2:
+        return n
+    memo[n] = climbStairs(n-1, memo) + climbStairs(n-2, memo)
+    return memo[n]
+
+
+# ----------------------------------------------------
+# 3. LC #322 – Coin Change
+# ----------------------------------------------------
+"""
+Recursive + Memoization approach.
+Try each coin and take the minimum.
+"""
+
+def coinChange(coins, amount, memo={}):
+    if amount in memo:
+        return memo[amount]
+    if amount == 0:
+        return 0
+    if amount < 0:
+        return -1
+    
+    min_coins = float('inf')
+    for coin in coins:
+        res = coinChange(coins, amount - coin, memo)
+        if res >= 0:
+            min_coins = min(min_coins, 1 + res)
+    
+    memo[amount] = -1 if min_coins == float('inf') else min_coins
+    return memo[amount]
+
+
+# ----------------------------------------------------
+# Example Usage
+# ----------------------------------------------------
+if __name__ == "__main__":
+    # Fibonacci
+    print("Fibonacci(10):", fib(10))  # Expected: 55
+    
+    # Climbing Stairs
+    print("Climbing Stairs (n=5):", climbStairs(5))  # Expected: 8
+    
+    # Coin Change
+    print("Coin Change (coins=[1,2,5], amount=11):", coinChange([1,2,5], 11))  # Expected: 3
+
+
+# ----------------------------------------------------
+# Key Notes:
+# ----------------------------------------------------
+# - Memoization avoids redundant recursive calls.
+# - Time complexity reduces drastically vs plain recursion.
+# - Same concept as Top-Down Dynamic Programming.
+# ----------------------------------------------------
