@@ -530,3 +530,112 @@ if __name__ == "__main__":
 # - Time complexity reduces drastically vs plain recursion.
 # - Same concept as Top-Down Dynamic Programming.
 # ----------------------------------------------------
+
+
+"""
+Day 42: Practice Dynamic Programming (Easy–Medium)
+Author: [Your Name]
+Date: [Today's Date]
+
+Problems Covered:
+1. LC #70 – Climbing Stairs
+2. LC #198 – House Robber
+3. LC #300 – Longest Increasing Subsequence
+4. LC #322 – Coin Change
+"""
+
+# ----------------------------------------------------
+# 1. LC #70 – Climbing Stairs
+# ----------------------------------------------------
+"""
+Ways(n) = Ways(n-1) + Ways(n-2)
+Base: Ways(1) = 1, Ways(2) = 2
+Time: O(n), Space: O(1)
+"""
+
+def climbStairs(n):
+    if n <= 2:
+        return n
+    prev1, prev2 = 1, 2
+    for _ in range(3, n+1):
+        prev1, prev2 = prev2, prev1 + prev2
+    return prev2
+
+
+# ----------------------------------------------------
+# 2. LC #198 – House Robber
+# ----------------------------------------------------
+"""
+Cannot rob adjacent houses.
+DP[i] = max(DP[i-1], DP[i-2] + nums[i])
+Time: O(n), Space: O(1)
+"""
+
+def rob(nums):
+    prev1, prev2 = 0, 0
+    for num in nums:
+        prev1, prev2 = max(prev1, prev2 + num), prev1
+    return prev1
+
+
+# ----------------------------------------------------
+# 3. LC #300 – Longest Increasing Subsequence (DP approach)
+# ----------------------------------------------------
+"""
+DP[i] = length of LIS ending at i
+Time: O(n^2), Space: O(n)
+"""
+
+def lengthOfLIS(nums):
+    n = len(nums)
+    dp = [1] * n
+    for i in range(n):
+        for j in range(i):
+            if nums[i] > nums[j]:
+                dp[i] = max(dp[i], dp[j] + 1)
+    return max(dp)
+
+
+# ----------------------------------------------------
+# 4. LC #322 – Coin Change
+# ----------------------------------------------------
+"""
+Unbounded knapsack type.
+dp[i] = minimum coins to make amount i.
+Time: O(amount * n), Space: O(amount)
+"""
+
+def coinChange(coins, amount):
+    dp = [float('inf')] * (amount + 1)
+    dp[0] = 0
+    for coin in coins:
+        for i in range(coin, amount + 1):
+            dp[i] = min(dp[i], dp[i - coin] + 1)
+    return dp[amount] if dp[amount] != float('inf') else -1
+
+
+# ----------------------------------------------------
+# Example Usage
+# ----------------------------------------------------
+if __name__ == "__main__":
+    # Climbing Stairs
+    print("Climbing Stairs (n=5):", climbStairs(5))  # Expected: 8
+    
+    # House Robber
+    print("House Robber [2,7,9,3,1]:", rob([2,7,9,3,1]))  # Expected: 12
+    
+    # Longest Increasing Subsequence
+    print("LIS [10,9,2,5,3,7,101,18]:", lengthOfLIS([10,9,2,5,3,7,101,18]))  # Expected: 4
+    
+    # Coin Change
+    print("Coin Change [1,2,5], amount=11:", coinChange([1,2,5], 11))  # Expected: 3
+
+
+# ----------------------------------------------------
+# Key Notes:
+# ----------------------------------------------------
+# - Climbing Stairs: Fibonacci-style DP
+# - House Robber: Non-adjacent max sum
+# - LIS: Subsequence optimization (O(n^2) version)
+# - Coin Change: Classic unbounded knapsack DP
+# ----------------------------------------------------
